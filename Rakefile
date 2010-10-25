@@ -5,10 +5,10 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "solrizer-fedora"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{An extension to solrizer that deals with Fedora objects & Repositories}
+    gem.description = %Q{An extension to projecthydra/solrizer that provides utilities for loading objects from Fedora Repositories and creating solr documents from them.}
     gem.email = "matt.zumwalt@yourmediashelf.com"
-    gem.homepage = "http://github.com/mediashelf/solrizer-fedora"
+    gem.homepage = "http://github.com/projecthydra/solrizer-fedora"
     gem.authors = ["Matt Zumwalt"]
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

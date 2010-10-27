@@ -1,6 +1,6 @@
 namespace :solrizer do
   
-  namespace :fedora  
+  namespace :fedora  do
     desc 'Index a fedora object of the given pid.'
     task :solrize => :environment do 
       index_full_text = ENV['FULL_TEXT'] == 'true'

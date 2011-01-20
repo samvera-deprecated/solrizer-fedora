@@ -6,6 +6,21 @@ require 'spec/autorun'
 
 require 'solrizer'
 
+
+# this allows us to unload constants for testing
+module Kernel
+  # Suppresses warnings within a given block.
+  def with_warnings_suppressed
+    saved_verbosity = $-v
+    $-v = nil
+    yield
+  ensure
+    $-v = saved_verbosity
+  end
+end
+
+
+
 Spec::Runner.configure do |config|
   
   config.mock_with :mocha

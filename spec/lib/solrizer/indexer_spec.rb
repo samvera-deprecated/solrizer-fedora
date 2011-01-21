@@ -26,6 +26,12 @@ describe Solrizer::Fedora::Indexer do
   
   end
     
+  after(:all) do
+    if Blacklight == String
+      Object.send(:remove_const,:Blacklight)
+    end
+  end
+
   describe "#new" do
     it "should return a URL from solr_config if the config has a :url" do
           Blacklight.stubs(:solr_config).returns({:url => "http://foo.com:8080/solr"})

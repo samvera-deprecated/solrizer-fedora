@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{solrizer-fedora}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Matt Zumwalt"]
-  s.date = %q{2010-10-26}
+  s.date = %q{2011-01-21}
   s.description = %q{An extension to projecthydra/solrizer that provides utilities for loading objects from Fedora Repositories and creating solr documents from them.}
   s.email = %q{matt.zumwalt@yourmediashelf.com}
   s.extra_rdoc_files = [
@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
      "solrizer-fedora.gemspec",
      "spec/fixtures/rels_ext_cmodel.xml",
      "spec/integration/fedora_indexer_spec.rb",
+     "spec/lib/solrizer/indexer_spec.rb",
      "spec/rcov.opts",
      "spec/spec.opts",
      "spec/spec_helper.rb",
@@ -53,6 +54,7 @@ Gem::Specification.new do |s|
   s.summary = %q{An extension to solrizer that deals with Fedora objects & Repositories}
   s.test_files = [
     "spec/integration/fedora_indexer_spec.rb",
+     "spec/lib/solrizer/indexer_spec.rb",
      "spec/spec_helper.rb",
      "spec/units/fedora_extractor_spec.rb",
      "spec/units/fedora_indexer_spec.rb",

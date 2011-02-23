@@ -96,7 +96,7 @@ class Indexer
   #
   # This method extracts the facet categories from the given Fedora object's external tag datastream
   #
-  def extract_xml_to_solr( obj, ds_name, solr_doc=Solr::Document.new )
+  def extract_xml_to_solr( obj, ds_name, solr_doc=Hash.new )
     xml_ds = Repository.get_datastream( obj, ds_name )
     extractor.xml_to_solr( xml_ds.content, solr_doc )
   end
@@ -104,7 +104,7 @@ class Indexer
   #
   #
   #
-  def extract_rels_ext( obj, ds_name, solr_doc=Solr::Document.new )
+  def extract_rels_ext( obj, ds_name, solr_doc=Hash.new )
     rels_ext_ds = Repository.get_datastream( obj, ds_name )
     extractor.extract_rels_ext( rels_ext_ds.content, solr_doc )
   end
@@ -120,26 +120,31 @@ class Indexer
 
    #if there is not date_t, add on with easy-to-find value
    if solr_doc[:date_t].nil?
-        solr_doc << Solr::Field.new( :date_t => "9999-99-99")
+        ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :date_t, "9999-99-99")
    end #if
 
-    # unless date_check !~  solr_doc[:date_t]     
-    date_obj = Date._parse(solr_doc[:date_t])
+    # Grab the date value from date_t regardless of wheter it is inside of an array
+    # then convert it to a Date object
+    date_value =    solr_doc[:date_t]
+    if date_value.kind_of? Array
+      date_value = date_value.first
+    end
+    date_obj = Date._parse(date_value)
     
     if date_obj[:mon].nil? 
-       solr_doc << Solr::Field.new(:month_facet => 99)
+       ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :month_facet, "99")
     elsif 0 < date_obj[:mon] && date_obj[:mon] < 13
-      solr_doc << Solr::Field.new( :month_facet => date_obj[:mon].to_s.rjust(2, '0'))
+      ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :month_facet, date_obj[:mon].to_s.rjust(2, '0'))
     else
-      solr_doc << Solr::Field.new( :month_facet => 99)
+      ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :month_facet, "99")
     end
       
     if  date_obj[:mday].nil?
-      solr_doc << Solr::Field.new( :day_facet => 99)
+      ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :day_facet, "99")
     elsif 0 < date_obj[:mday] && date_obj[:mday] < 32   
-      solr_doc << Solr::Field.new( :day_facet => date_obj[:mday].to_s.rjust(2, '0'))
+      ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :day_facet, date_obj[:mday].to_s.rjust(2, '0'))
     else
-       solr_doc << Solr::Field.new( :day_facet => 99)
+       ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :day_facet, "99")
     end
     
     return solr_doc
@@ -153,7 +158,7 @@ class Indexer
   #
   def create_document( obj )        
     
-    solr_doc = Solr::Document.new
+    solr_doc = Hash.new
     
     model_klazz_array = ActiveFedora::ContentModel.known_models_for( obj )
     model_klazz_array.delete(ActiveFedora::Base)
@@ -177,8 +182,8 @@ class Indexer
       puts "  added solr fields from #{klazz.to_s}"
     end
     
-    solr_doc << Solr::Field.new( :id_t => "#{obj.pid}" )
-    solr_doc << Solr::Field.new( :id => "#{obj.pid}" ) unless solr_doc[:id]
+    ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :id_t, "#{obj.pid}" )
+    ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :id, "#{obj.pid}" ) unless solr_doc[:id]
     
     # increment the unique id to ensure that all documents in the search index are unique
     @@unique_id += 1

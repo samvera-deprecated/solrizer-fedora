@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 gem 'active-fedora', '1.2.7'  
-gem 'solrizer', '>=0.3.0'
+gem 'solrizer', '>=1.0.0'
 
 group :development, :test do
   gem 'ruby-debug'

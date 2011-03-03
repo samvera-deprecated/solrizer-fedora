@@ -21,7 +21,7 @@ describe Solrizer::Fedora::Indexer do
      
        @extractor = mock("Extractor")
        @extractor.stubs(:html_content_to_solr).returns(@solr_doc)
-       @solr_doc = Solr::Document.new
+       @solr_doc = Hash.new
        Solrizer::Extractor.expects(:new).returns(@extractor)
   
   end

@@ -1,4 +1,4 @@
-require 'solr'
+require 'rsolr'
 require 'solrizer/extractor'
 require 'solrizer/fedora/repository'
 
@@ -16,7 +16,7 @@ class Indexer
   #
   # Member variables
   #
-  attr_accessor :connection, :extractor, :index_full_text
+  attr_accessor :solr, :extractor, :index_full_text
 
   #
   # This method performs initialization tasks
@@ -86,7 +86,8 @@ class Indexer
       else
         raise
       end
-      @connection = Solr::Connection.new(url, :autocommit => :on )
+      @solr = RSolr.connect :url => url
+      # @connection = Solr::Connection.new(url, :autocommit => :on )
       
     rescue
         puts "Unable to establish SOLR Connection with #{solr_config.inspect}"
@@ -167,11 +168,11 @@ class Indexer
     # Otherwise, the object was passed in as a model instance other than ActiveFedora::Base,so call its to_solr method & allow it to insert the fields from ActiveFedora::Base
     if obj.class == ActiveFedora::Base
       solr_doc = obj.to_solr(solr_doc)
-      puts "  added base fields from #{obj.class.to_s}"
+      logger.debug "  added base fields from #{obj.class.to_s}"
     else
       solr_doc = obj.to_solr(solr_doc)
       model_klazz_array.delete(obj.class)
-      puts "    added base fields from #{obj.class.to_s} and model fields from #{obj.class.to_s}"
+      logger.debug "    added base fields from #{obj.class.to_s} and model fields from #{obj.class.to_s}"
     end
    
     # Load the object as an instance of each of its other models and get the corresponding solr fields
@@ -179,7 +180,7 @@ class Indexer
     model_klazz_array.each do |klazz|
       instance = klazz.load_instance(obj.pid)
       solr_doc = instance.to_solr(solr_doc, :model_only=>true)
-      puts "  added solr fields from #{klazz.to_s}"
+      logger.debug "  added solr fields from #{klazz.to_s}"
     end
     
     ::Solrizer::Extractor.insert_solr_field_value(solr_doc, :id_t, "#{obj.pid}" )
@@ -199,9 +200,15 @@ class Indexer
     begin
       
       solr_doc = create_document( obj )
-      connection.add( solr_doc )
+      
+      begin
+        solr.add( solr_doc )
+        solr.commit
+      # rescue
+      #   debugger
+      end
  
-     # puts connection.url
+     # puts solr.url
      #puts solr_doc
      #  puts "done"
    

@@ -40,7 +40,7 @@ class Solrizer
       begin
       
       start = Time.now
-      print "Retrieving object #{obj} ..."
+      logger.debug "SOLRIZER Retrieving object #{obj} ..."
 
       case obj
       when ActiveFedora::Base
@@ -57,9 +57,9 @@ class Solrizer
         
           obj_done = Time.now
           obj_done_elapse = obj_done - start
-          puts  " completed. Duration: #{obj_done_elapse}"
+          logger.debug  " completed. Duration: #{obj_done_elapse}"
           
-         print "\t Indexing object #{obj.pid} ... "
+         logger.debug "\t Indexing object #{obj.pid} ... "
          # add the keywords and facets to the search index
          index_start = Time.now
          indexer.index( obj )
@@ -67,11 +67,11 @@ class Solrizer
          index_done = Time.now
          index_elapsed = index_done - index_start
          
-          puts "completed. Duration:  #{index_elapsed} ."
+          logger.debug "completed. Duration:  #{index_elapsed} ."
         
       
       rescue Exception => e
-           p "unable to index #{obj}.  Failed with #{e.inspect}"
+           p "SOLRIZER unable to index #{obj}.  Failed with #{e.inspect}"
         
       
       end #begin

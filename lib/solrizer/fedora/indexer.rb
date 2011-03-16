@@ -90,7 +90,7 @@ class Indexer
       # @connection = Solr::Connection.new(url, :autocommit => :on )
       
     rescue
-        puts "Unable to establish SOLR Connection with #{solr_config.inspect}"
+        logger.debug "Unable to establish SOLR Connection with #{solr_config.inspect}"
         raise  URI::InvalidURIError
     end
 

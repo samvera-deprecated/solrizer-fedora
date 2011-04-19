@@ -34,7 +34,7 @@ class Solrizer
   #
   # This method solrizes the given Fedora object's full-text and facets into the search index
   #
-  def solrize( obj )
+  def solrize( obj, opts={} )
     # retrieve the Fedora object based on the given unique id
       
       begin
@@ -71,11 +71,13 @@ class Solrizer
         
       
       rescue Exception => e
-           p "SOLRIZER unable to index #{obj}.  Failed with #{e.inspect}"
-        
-      
-      end #begin
-  
+        if opts[:suppress_errors] 
+          logger.debug "SOLRIZER unable to index #{obj}.  Failed with #{e.inspect}"
+        else
+          raise e
+        end
+    end #begin
+
   end
   
   #

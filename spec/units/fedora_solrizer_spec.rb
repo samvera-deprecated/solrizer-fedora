@@ -35,8 +35,14 @@ describe Solrizer::Fedora::Solrizer do
     it "should call solrize for each object returned by Fedora::Repository.find_objects" do
       objects = [["pid1"], ["pid2"], ["pid3"]]
       Fedora::Repository.any_instance.expects(:find_objects).returns(objects)
-      objects.each {|object| @solrizer.expects(:solrize).with( object ) }
+      objects.each {|object| @solrizer.expects(:solrize).with( object, {} ) }
       @solrizer.solrize_objects
+    end
+    it "should pass optional suppress_errors argument into .solrize method" do
+      objects = [["pid1"], ["pid2"], ["pid3"]]
+      Fedora::Repository.any_instance.expects(:find_objects).returns(objects)
+      objects.each {|object| @solrizer.expects(:solrize).with( object, :suppress_errors => true ) }
+      @solrizer.solrize_objects( :suppress_errors => true )
     end
   end
 end

@@ -1,3 +1,7 @@
+h2. 1.0.2
+
+switched solrize_objects to only intercept errors if it's given an optional parameter of :suppress_errors=>true
+
 h2. 0.1.0
 
 Initial Release -- pretty much a direct replica of all of the fedora-related stuff in solrizer versions older than 0.3.0

@@ -48,7 +48,7 @@ class Indexer
       if ActiveFedora.fedora_config.empty?
         ActiveFedora.init
       end
-    
+  
       if defined?(Blacklight)
         solr_config = Blacklight.solr_config
       else  
@@ -86,12 +86,13 @@ class Indexer
       else
         raise
       end
+
       @solr = RSolr.connect :url => url
       # @connection = Solr::Connection.new(url, :autocommit => :on )
       
-    rescue
-        logger.debug "Unable to establish SOLR Connection with #{solr_config.inspect}"
-        raise  URI::InvalidURIError
+    rescue RuntimeError => e
+      logger.debug "Unable to establish SOLR Connection with #{solr_config.inspect}.  Failed with #{e.message}"
+      raise  URI::InvalidURIError
     end
 
   #

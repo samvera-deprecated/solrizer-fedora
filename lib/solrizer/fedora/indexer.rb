@@ -59,9 +59,12 @@ class Indexer
           solr_config = yaml[RAILS_ENV]
           puts solr_config.inspect
         else
-          config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config")
-          puts config_path.inspect + "&&&&&&&"
-          yaml = YAML.load(File.open(File.join(config_path, "solr.yml")))
+          config_path = File.join("config","solr.yml")
+          unless File.exist?(config_path)
+            config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config", "solr.yml")
+          end
+          logger.debug "SOLRIZER: reading config from " + config_path.inspect 
+          yaml = YAML.load(File.open(config_path))
           
           if ENV["environment"].nil?
             environment = "development"
@@ -70,7 +73,7 @@ class Indexer
           end #if
         
           solr_config = yaml[environment]
-          puts solr_config.inspect
+          logger.debug "SOLRIZER solr_config:" + solr_config.inspect
         end #if defined?(RAILS_ROOT)
       
       end #if defined?(Blacklight)

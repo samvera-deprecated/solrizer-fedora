@@ -19,5 +19,7 @@ rdoc
 pkg
 /.bundle
 /.rvmrc
+jetty/logs/*.log
+jetty/solr/data/*
 
 ## PROJECT::SPECIFIC

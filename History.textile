@@ -1,3 +1,9 @@
+h2. 1.0.3
+
+smarter loading of config files 
+switched solrize_objects to only intercept errors if it's given an optional parameter of :suppress_errors=>true
+cleaner command line output
+
 h2. 1.0.2
 
 switched solrize_objects to only intercept errors if it's given an optional parameter of :suppress_errors=>true

@@ -4,8 +4,11 @@ gem 'rsolr'
 gem 'solrizer', '>=1.0.0'
 
 group :development, :test do
+  gem 'jettywrapper'
   gem 'ruby-debug'
   gem 'ruby-debug-base'
   gem 'rspec', '<2.0.0'
   gem 'mocha'
+  gem 'yard'
+  gem 'RedCloth'
 end

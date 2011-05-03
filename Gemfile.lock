@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    RedCloth (4.2.7)
     active-fedora (2.2.0)
       active-fedora
       activeresource
@@ -23,6 +24,7 @@ GEM
     equivalent-xml (0.2.6)
       nokogiri (>= 1.4.3)
     facets (2.9.1)
+    jettywrapper (0.0.3)
     linecache (0.43)
     mediashelf-loggable (0.4.2)
     mime-types (1.16)
@@ -48,21 +50,25 @@ GEM
       nokogiri
       nokogiri
       nokogiri
-      om (>= 1.0.0)
       om
+      om (>= 1.0.0)
       stomp
       xml-simple
     stomp (1.1.8)
     xml-simple (1.0.15)
+    yard (0.6.8)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  RedCloth
   active-fedora (>= 2.2.0)
+  jettywrapper
   mocha
   rsolr
   rspec (< 2.0.0)
   ruby-debug
   ruby-debug-base
   solrizer (>= 1.0.0)
+  yard

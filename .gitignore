@@ -19,6 +19,8 @@ rdoc
 pkg
 /.bundle
 /.rvmrc
+/.yardoc
+/doc
 jetty/logs/*.log
 jetty/solr/data/*
 

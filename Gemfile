@@ -5,6 +5,7 @@ gem 'solrizer', '>=1.0.0'
 
 group :development, :test do
   gem 'jettywrapper'
+  gem 'rcov'
   gem 'ruby-debug'
   gem 'ruby-debug-base'
   gem 'rspec', '<2.0.0'

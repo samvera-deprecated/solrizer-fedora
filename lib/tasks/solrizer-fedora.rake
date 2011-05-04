@@ -12,7 +12,7 @@ task :hudson do
     }
     error = Jettywrapper.wrap(jetty_params) do
       Rake::Task["doc"].invoke
-      Rake::Task["spec"].invoke
+      Rake::Task["solrizer:fedora:rspec"].invoke
     end
     raise "test failures: #{error}" if error
   else
@@ -71,6 +71,15 @@ namespace :solrizer do
       solrizer.solrize_objects
       puts "Solrizer task complete."
     end  
+    
+    Spec::Rake::SpecTask.new(:rspec) do |t|
+      t.spec_files = FileList['spec/**/*_spec.rb']
+      t.rcov = true
+      t.rcov_opts = lambda do
+        IO.readlines("spec/rcov.opts").map {|l| l.chomp.split " "}.flatten
+      end
+    end
+    
   end
   
 end

@@ -8,7 +8,7 @@ task :hudson do
       :jetty_port => 8983, 
       :solr_home => File.expand_path(File.dirname(__FILE__) + '/../../jetty/solr/test-core'),
       :fedora_home => File.expand_path(File.dirname(__FILE__) + '/../../jetty/fedora/default'),
-      :startup_wait => 5
+      :startup_wait => 25
     }
     error = Jettywrapper.wrap(jetty_params) do
       Rake::Task["doc"].invoke

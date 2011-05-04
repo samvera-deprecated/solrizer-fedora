@@ -21,7 +21,6 @@ pkg
 /.rvmrc
 /.yardoc
 /doc
-jetty/logs/*.log
-jetty/solr/data/*
+jetty/*
 
 ## PROJECT::SPECIFIC

@@ -1,3 +1,14 @@
+PATH
+  remote: .
+  specs:
+    solrizer-fedora (1.0.3)
+      active-fedora (>= 2.2.0)
+      fastercsv
+      rsolr
+      solr-ruby (>= 0.0.6)
+      solrizer (>= 1.0.0)
+      solrizer-fedora
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -24,7 +35,13 @@ GEM
     equivalent-xml (0.2.6)
       nokogiri (>= 1.4.3)
     facets (2.9.1)
+    fastercsv (1.5.4)
+    git (1.2.5)
     jettywrapper (0.0.3)
+    jeweler (1.6.0)
+      bundler (~> 1.0.0)
+      git (>= 1.2.5)
+      rake
     linecache (0.43)
     mediashelf-loggable (0.4.2)
     mime-types (1.16)
@@ -34,6 +51,7 @@ GEM
     om (1.2.4)
       nokogiri (>= 1.4.2)
       om
+    rake (0.8.7)
     rcov (0.9.9)
     rsolr (1.0.0)
       builder (>= 2.1.2)
@@ -64,13 +82,12 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
-  active-fedora (>= 2.2.0)
   jettywrapper
+  jeweler
   mocha
   rcov
-  rsolr
   rspec (< 2.0.0)
   ruby-debug
   ruby-debug-base
-  solrizer (>= 1.0.0)
+  solrizer-fedora!
   yard

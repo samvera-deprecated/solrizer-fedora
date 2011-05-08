@@ -8,7 +8,7 @@ require 'solrizer/html'
 # Let people explicitly require xml support if they want it ...
 # require 'solrizer/xml.rb'
 
-# require 'fastercsv'
+require 'fastercsv' # this is used by solrize_objects when you pass it a csv file of pids
 require "ruby-debug"
 
 

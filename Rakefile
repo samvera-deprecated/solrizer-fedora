@@ -13,6 +13,11 @@ begin
     gem.email = "matt.zumwalt@yourmediashelf.com"
     gem.homepage = "http://github.com/projecthydra/solrizer-fedora"
     gem.authors = ["Matt Zumwalt"]
+    gem.add_dependency('solr-ruby', '>= 0.0.6')
+    gem.add_dependency('active-fedora', '>=2.2.0') 
+    gem.add_dependency('rsolr') 
+    gem.add_dependency('solrizer', '>=1.0.0')
+    gem.add_dependency('fastercsv') # this is used by solrize_objects when you pass it a csv file of pids
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

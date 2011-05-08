@@ -1,9 +1,7 @@
 source "http://rubygems.org"
-gem 'active-fedora', '>=2.2.0' 
-gem 'rsolr' 
-gem 'solrizer', '>=1.0.0'
 
 group :development, :test do
+  gem 'jeweler'
   gem 'jettywrapper'
   gem 'rcov'
   gem 'ruby-debug'
@@ -13,3 +11,5 @@ group :development, :test do
   gem 'yard'
   gem 'RedCloth'
 end
+
+gemspec

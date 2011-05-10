@@ -2,29 +2,216 @@ h1. solrizer-fedora
 
 An extension to projecthydra/solrizer that provides utilities for loading objects from Fedora Repositories and creating solr documents from them.
 
+h2. Installation
+
+The gem is hosted on rubygems.org. The bset way to manage the gems for your project is to use bundler.  Create a Gemfile in the root of your application and include the following:
+
+<pre>
+source "http://rubygems.org"
+
+gem 'solrizer-fedora'
+</pre>
+
+Then:
+
+<pre>bundle install</pre>
+
+
+h2. Testing
+
+In order to run the RSpec tests, it is necesary to have a hydra-jetty instance running.  This can be accomplished two ways:
+
+h3. Using the bundled jetty instance:
+
+Configure the bundled hydra-jetty instance.
+
+<pre>
+git submodule init
+git submodule update
+</pre>
+
+Once you have updated the jetty submodule, you can easily run the rspec tests with the following rake task:
+
+<pre>
+rake hudson
+</pre>
+
+While the primary intention of this task is to provide test coverage and documentation out on projecthydra's "continuous integration server":hudson.projecthydra.org, it can also be used locally to run tests without having to install and configure an instance of "hydra-jetty":https://github.com/projecthydra/hydra-jetty.
+
+Note: if you have another instance of hydra-jetty running, you should either close it down prior to running the rake hudson task.
+
+
+h3. Using a different instance of hydra-jetty:
+
+If you prefer, you can run the specs against a different hydra-jetty instance.  Follow the instructions included with those projects to start the jetty instance.
+
+
+
+h2. Pre-requisite
+
+h3. Setup local hydra-jetty
+
+In order to use solrizer-fedora, you must first set up an instance of "hydra-jetty":https://github.com/projecthydra/hydra-jetty.
+
+Once you have set this up, cd into the directory and type:
+
+<pre>java -jar start.jar</pre>
+
+You must tell the app where to find fedora and solr.  Put that information into config/fedora.yml and config/solr.yml:
+
+Sample config files:
+
+config/fedora.yml
+<pre>
+development:
+  fedora:
+    url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
+  solr:
+    url: http://127.0.0.1:8983/solr/development
+test:
+  fedora:
+    url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
+  solr:
+    url: http://127.0.0.1:8983/solr/test
+production:
+  fedora:
+    url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8080/fedora
+  solr:
+    url: http://127.0.0.1:8080/solr
+</pre>
+
+config/solr.yml
+<pre>
+development:
+  default:
+    url: http://localhost:8983/solr
+  full_text:
+    url: http://localhost:8983/solr
+test: &TEST
+  default:
+    url: http://localhost:8983/solr
+  full_text:
+    url: http://localhost:8983/solr
+production:
+  default:
+    url: http://localhost:8080/solr/production 
+  full_text:
+    url: http://localhost:8080/solr/production 
+</pre>
+
 h2. Usage
 
-<pre>gem install solrizer-fedora</pre>
+h3. Fire up the console:
 
-You must tell the app where to find fedora and solr.  Put that information into config/fedora.yml and config/solr.yml
-
-Then...
+Start up a console and load solrizer-fedora:
 
 <pre>
 irb
 require "rubygems"
 require "solrizer-fedora"
-solrizer = Solrizer::Fedora::Solrizer.new
-solrizer.solrize("demo:5")
 </pre>
+
+Initialize ActiveFedora:
+
+<pre>
+ActiveFedora.init
+</pre>
+
+
+h3. Create an instance of Solrizer::Fedora::Solrizer:
+
+<pre>
+solrizer = Solrizer::Fedora::Solrizer.new
+</pre>
+
+Or, if you want to index full text rather than just fields:
+
+<pre>
+full_text_solrizer = Solrizer::Fedora::Solrizer.new(:index_full_text=>true)
+</pre>
+
+
+h3. Solrizing a single object in your repository:
+
+If you have an existing object in your repository, you can solrize it by passing it's pid:
+
+<pre>
+solrizer.solrize "demo:5"
+</pre>
+
+If you have either an instance of ActiveFedora::Base or Fedora::Object, you can solrize it by passing the object itself:
+
+<pre>
+my_object = ActiveFedora::Base.new
+
+solrizer.solrize my_object
+</pre>
+
+To view the resulting document, open a web browser and go to the jetty's solr admin page (most likely http://localhost/solr/admin) and query your solr instance for the pid (e.g. id:demo\:5).
+
+
+h3. Solrizing all the objects in your repository:
+
+In order to solrize all the objects in your repository, run:
+
+<pre>
+solrizer.solrize_objects
+</pre>
+
+
+h3. Advanced usage
+
+Solrizer-fedora inspects your repository objects and attempts to match your objects to your ruby models based on the hasModel declarations in the RELS-EXT datastream.
+
+For instance, if you have an object in your repository with the following RELS-EXT:
+
+<pre>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/changeme:3">
+    <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:MyObject"></hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</pre>
+
+Solrizer-fedora will check to see if you have a matching ruby model call MyObject.  If you do, it will load it and add any specific solr fields specified.  So, assuming the following model:
+
+<pre>
+class MyObject < ActiveFedora::Base
+
+  has_metadata :name => "properties", :type=> ActiveFedora::MetadataDatastream do |m|
+    m.field 'foo', :string
+  end
+
+end
+</pre>
+
+And the following content of the properties datastream:
+
+<pre>
+<fields>
+  <foo>bar</foo>
+</fields>
+</pre>
+
+Your solr doc will include the following:
+
+<pre>
+<arr name="foo_t">
+  <str>bar</str>
+</arr>
+</pre>
+
+
+
+
 
 
 h2.  Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
+* Add tests for it. This is important so it doesn't get broken unintentionally 
+  in a future version.
 * Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.

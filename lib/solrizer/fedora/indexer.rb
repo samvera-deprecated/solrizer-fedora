@@ -153,7 +153,6 @@ class Indexer
     end
     
     return solr_doc
-#      end
         
   end
   

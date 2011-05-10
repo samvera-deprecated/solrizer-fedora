@@ -2,6 +2,8 @@ require 'rexml/document'
 require "nokogiri"
 require 'yaml'
 
+# Solrizer::Fedora::Extractor provides Fedora-specific extractor behaviors
+# This module is automatically mixed into Solrizer::Extractor when you load the solrizer-fedora gem into an application.  This is carried out in solrizer/fedora.rb 
 module Solrizer::Fedora::Extractor
 
   #

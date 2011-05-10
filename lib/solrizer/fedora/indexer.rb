@@ -13,10 +13,15 @@ class Indexer
     @@unique_id
   end
 
-  #
-  # Member variables
-  #
-  attr_accessor :solr, :extractor, :index_full_text
+
+  # The instance of solr that updates will be written to
+  attr_accessor :solr
+  
+  # The extractor to use.  This is usually Solrizer::Extractor 
+  attr_accessor :extractor
+  
+  # [Boolean or "true" or "false"] tells the indexer whether to index full text or just field values 
+  attr_accessor :index_full_text
 
   #
   # This method performs initialization tasks
@@ -34,6 +39,7 @@ class Indexer
     connect
   end
 
+
   #
   # This method connects to the Solr instance. It looks to see if Blacklight is loaded first for the 
   # Blacklight.solr_config. If not loaded, it then looks for the RAILS_ROOT/config/solr.yaml file and loads
@@ -42,61 +48,60 @@ class Indexer
   # or { "development"=>{"url"=>"http://localhost" }}
   # Can also take Blacklight.solr_config["url"] and Blacklight.solr_config[:url] 
   #
-  
-   def connect
-    
-      if ActiveFedora.fedora_config.empty?
-        ActiveFedora.init
-      end
-  
-      if defined?(Blacklight)
-        solr_config = Blacklight.solr_config
-      else  
-        if defined?(RAILS_ROOT)
-          config_path = File.join(RAILS_ROOT, "config")
-          yaml = YAML.load(File.open(File.join(config_path, "solr.yml")))
-          puts RAILS_ENV + "*****"
-          solr_config = yaml[RAILS_ENV]
-          puts solr_config.inspect
-        else
-          config_path = File.join("config","solr.yml")
-          unless File.exist?(config_path)
-            config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config", "solr.yml")
-          end
-          logger.debug "SOLRIZER: reading config from " + config_path.inspect 
-          yaml = YAML.load(File.open(config_path))
-          
-          if ENV["environment"].nil?
-            environment = "development"
-          else
-            environment = ENV["environment"]
-          end #if
-        
-          solr_config = yaml[environment]
-          logger.debug "SOLRIZER solr_config:" + solr_config.inspect
-        end #if defined?(RAILS_ROOT)
-      
-      end #if defined?(Blacklight)
-        
-      if index_full_text == true && solr_config['fulltext'].has_key?('url')
-        url = solr_config['fulltext']['url']
-      elsif solr_config.has_key?("default") && 
-        url = solr_config['default']['url']
-      elsif solr_config.has_key?('url')
-        url = solr_config['url']
-      elsif solr_config.has_key?(:url)
-        url = solr_config[:url]
-      else
-        raise
-      end
+  def connect
 
-      @solr = RSolr.connect :url => url
-      # @connection = Solr::Connection.new(url, :autocommit => :on )
-      
-    rescue RuntimeError => e
-      logger.debug "Unable to establish SOLR Connection with #{solr_config.inspect}.  Failed with #{e.message}"
-      raise  URI::InvalidURIError
+    if ActiveFedora.fedora_config.empty?
+      ActiveFedora.init
     end
+
+    if defined?(Blacklight)
+      solr_config = Blacklight.solr_config
+    else  
+      if defined?(RAILS_ROOT)
+        config_path = File.join(RAILS_ROOT, "config")
+        yaml = YAML.load(File.open(File.join(config_path, "solr.yml")))
+        puts RAILS_ENV + "*****"
+        solr_config = yaml[RAILS_ENV]
+        puts solr_config.inspect
+      else
+        config_path = File.join("config","solr.yml")
+        unless File.exist?(config_path)
+          config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config", "solr.yml")
+        end
+        logger.debug "SOLRIZER: reading config from " + config_path.inspect 
+        yaml = YAML.load(File.open(config_path))
+      
+        if ENV["environment"].nil?
+          environment = "development"
+        else
+          environment = ENV["environment"]
+        end #if
+    
+        solr_config = yaml[environment]
+        logger.debug "SOLRIZER solr_config:" + solr_config.inspect
+      end #if defined?(RAILS_ROOT)
+  
+    end #if defined?(Blacklight)
+    
+    if index_full_text == true && solr_config['fulltext'].has_key?('url')
+      url = solr_config['fulltext']['url']
+    elsif solr_config.has_key?("default") && 
+      url = solr_config['default']['url']
+    elsif solr_config.has_key?('url')
+      url = solr_config['url']
+    elsif solr_config.has_key?(:url)
+      url = solr_config[:url]
+    else
+      raise
+    end
+
+    @solr = RSolr.connect :url => url
+    # @connection = Solr::Connection.new(url, :autocommit => :on )
+  
+  rescue RuntimeError => e
+    logger.debug "Unable to establish SOLR Connection with #{solr_config.inspect}.  Failed with #{e.message}"
+    raise  URI::InvalidURIError
+  end
 
   #
   # This method extracts the facet categories from the given Fedora object's external tag datastream

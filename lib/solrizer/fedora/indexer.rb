@@ -83,9 +83,9 @@ class Indexer
   
     end #if defined?(Blacklight)
     
-    if index_full_text == true && solr_config['fulltext'].has_key?('url')
+    if index_full_text == true && solr_config.has_key?('fulltext') && solr_config['fulltext'].has_key?('url')
       url = solr_config['fulltext']['url']
-    elsif solr_config.has_key?("default") && 
+    elsif solr_config.has_key?("default") && solr_config['default'].has_key?('url')
       url = solr_config['default']['url']
     elsif solr_config.has_key?('url')
       url = solr_config['url']

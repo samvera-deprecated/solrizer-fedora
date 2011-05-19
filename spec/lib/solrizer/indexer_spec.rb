@@ -34,28 +34,38 @@ describe Solrizer::Fedora::Indexer do
 
   describe "#new" do
     it "should return a URL from solr_config if the config has a :url" do
-          Blacklight.stubs(:solr_config).returns({:url => "http://foo.com:8080/solr"})
-          @indexer = Solrizer::Fedora::Indexer.new
+      Blacklight.stubs(:solr_config).returns({:url => "http://foo.com:8080/solr"})
+      @indexer = Solrizer::Fedora::Indexer.new
+      @indexer.solr.uri.to_s.should == "http://foo.com:8080/solr/"
     end
      
     it "should return a URL from solr_config if the config has a 'url' " do
-           Blacklight.stubs(:solr_config).returns({'url' => "http://foo.com:8080/solr"})
-           @indexer = Solrizer::Fedora::Indexer.new
+      Blacklight.stubs(:solr_config).returns({'url' => "http://foo.com:8080/solr"})
+      @indexer = Solrizer::Fedora::Indexer.new
+      @indexer.solr.uri.to_s.should == "http://foo.com:8080/solr/"
     end
      
     it "should raise and error if there is not a :url or 'url' in the config hash" do
-            Blacklight.stubs(:solr_config).returns({'boosh' => "http://foo.com:8080/solr"})
-            lambda { Solrizer::Fedora::Indexer.new }.should raise_error(URI::InvalidURIError)         
+      Blacklight.stubs(:solr_config).returns({'boosh' => "http://foo.com:8080/solr"})
+      lambda { Solrizer::Fedora::Indexer.new }.should raise_error(URI::InvalidURIError)         
     end
       
     it "should return a fulltext URL if solr_config has a fulltext url defined" do
-          Blacklight.stubs(:solr_config).returns({'fulltext' =>{ 'url' => "http://foo.com:8080/solr"}})
-          @indexer = Solrizer::Fedora::Indexer.new(:index_full_text => true)
+      Blacklight.stubs(:solr_config).returns({'fulltext' =>{ 'url' => "http://fulltext.com:8080/solr"}, 'default' =>{ 'url' => "http://default.com:8080/solr"}})
+      @indexer = Solrizer::Fedora::Indexer.new(:index_full_text => true)
+      @indexer.solr.uri.to_s.should == "http://fulltext.com:8080/solr/"
     end
       
+    it "should gracefully handle when index_full_text is true but there is no fulltext in the configuration" do
+      Blacklight.stubs(:solr_config).returns({'default' =>{ 'url' => "http://foo.com:8080/solr"}})
+      @indexer = Solrizer::Fedora::Indexer.new(:index_full_text => true)
+      @indexer.solr.uri.to_s.should == "http://foo.com:8080/solr/"
+    end
+    
     it "should return a fulltext URL if solr_config has a default url defined" do
-          Blacklight.stubs(:solr_config).returns({'default' =>{ 'url' => "http://foo.com:8080/solr"}})
-           @indexer = Solrizer::Fedora::Indexer.new(:index_full_text => false)
+      Blacklight.stubs(:solr_config).returns({'default' =>{ 'url' => "http://foo.com:8080/solr"}})
+      @indexer = Solrizer::Fedora::Indexer.new(:index_full_text => false)
+      @indexer.solr.uri.to_s.should == "http://foo.com:8080/solr/"
     end
       
     it "should find the solr.yml even if Blacklight is not loaded" do 

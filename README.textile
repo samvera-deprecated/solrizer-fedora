@@ -124,7 +124,7 @@ h3. Create an instance of Solrizer::Fedora::Solrizer:
 solrizer = Solrizer::Fedora::Solrizer.new
 </pre>
 
-Or, if you want to index full text rather than just fields:
+Or, if you want to index full text rather than just fields (and you have provided a full text solr index in your solr.yml):
 
 <pre>
 full_text_solrizer = Solrizer::Fedora::Solrizer.new(:index_full_text=>true)
@@ -163,17 +163,18 @@ h3. Advanced usage
 
 Solrizer-fedora inspects your repository objects and attempts to match your objects to your ruby models based on the hasModel declarations in the RELS-EXT datastream.
 
-For instance, if you have an object in your repository with the following RELS-EXT:
+Go to the fedora admin interface (http://FEDORA_BASE_URL/fedora/admin) and create a new object with an PID of "changeme:123" and whatever Label you want.
 
+Once you have created that object you will need to add the RELS-EXT datastream to it.  Make the datastream ID "RELS-EXT", MIME-Type of "application/rdf+xml", and put the XML below in the XML from text field.
 <pre>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <rdf:Description rdf:about="info:fedora/changeme:3">
+  <rdf:Description rdf:about="info:fedora/changeme:123">
     <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:MyObject"></hasModel>
   </rdf:Description>
 </rdf:RDF>
 </pre>
 
-Solrizer-fedora will check to see if you have a matching ruby model call MyObject.  If you do, it will load it and add any specific solr fields specified.  So, assuming the following model:
+Solrizer-fedora will check to see if you have a matching ruby model called MyObject.  If you do, it will load it and add any specific solr fields specified.  So, assuming the following model:
 
 <pre>
 class MyObject < ActiveFedora::Base
@@ -185,7 +186,7 @@ class MyObject < ActiveFedora::Base
 end
 </pre>
 
-And the following content of the properties datastream:
+Now add another datastream to the changeme:123 object and give it a datastream ID of "properties", a MIME-Type of "text/xml", and add the following to the XML from text field:
 
 <pre>
 <fields>
@@ -193,7 +194,13 @@ And the following content of the properties datastream:
 </fields>
 </pre>
 
-Your solr doc will include the following:
+If you still have your fedora-solrizer class from above you can now solrize the object by ID:
+
+<pre>
+solrizer.solrize "changeme:123"  
+</pre>
+
+Now your solr doc with the "changeme:123" ID will include the following:
 
 <pre>
 <arr name="foo_t">

@@ -12,12 +12,16 @@ module Solrizer::Fedora::Extractor
   def extract_rels_ext( text, solr_doc=Hash.new )
     # TODO: only read in this file once
     
-    if defined?(RAILS_ROOT)
-      config_path = File.join(RAILS_ROOT, "config")
-    else
-      config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config")
-    end    
-    map = YAML.load(File.open(File.join(config_path, "hydra_types.yml")))
+    if defined?(Rails.root.to_s)
+      config_path = File.join(Rails.root.to_s, "config","hydra_types.yml")
+      config_path = nil unless File.exist?(config_path)
+    end
+    unless config_path
+      config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config","hydra_types.yml")
+    end
+    
+    
+    map = YAML.load(File.open(config_path))
     
     doc = Nokogiri::XML(text)
     doc.xpath( '//foo:hasModel', 'foo' => 'info:fedora/fedora-system:def/model#' ).each do |element|

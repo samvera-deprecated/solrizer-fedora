@@ -39,15 +39,15 @@ class Indexer
     connect
   end
 
-
   #
   # This method connects to the Solr instance. It looks to see if Blacklight is loaded first for the 
-  # Blacklight.solr_config. If not loaded, it then looks for the RAILS_ROOT/config/solr.yaml file and loads
+  # Blacklight.solr_config. If not loaded, it then looks for the Rails.root.to_s/config/solr.yaml file and loads
   # it to get the solr url. The configuration strucuture can take both the 
   # { "development" => {"default" => { "url" => "http://localhost"}, "fulltext" => { "url" => "http://localhost"} }}
   # or { "development"=>{"url"=>"http://localhost" }}
   # Can also take Blacklight.solr_config["url"] and Blacklight.solr_config[:url] 
   #
+
   def connect
 
     if ActiveFedora.fedora_config.empty?
@@ -57,8 +57,8 @@ class Indexer
     if defined?(Blacklight)
       solr_config = Blacklight.solr_config
     else  
-      if defined?(RAILS_ROOT)
-        config_path = File.join(RAILS_ROOT, "config")
+      if defined?(Rails.root.to_s)
+        config_path = File.join(Rails.root.to_s, "config", "solr.yml")
         yaml = YAML.load(File.open(File.join(config_path, "solr.yml")))
         puts RAILS_ENV + "*****"
         solr_config = yaml[RAILS_ENV]
@@ -79,8 +79,7 @@ class Indexer
     
         solr_config = yaml[environment]
         logger.debug "SOLRIZER solr_config:" + solr_config.inspect
-      end #if defined?(RAILS_ROOT)
-  
+      end #if defined?(Rails.root)
     end #if defined?(Blacklight)
     
     if index_full_text == true && solr_config.has_key?('fulltext') && solr_config['fulltext'].has_key?('url')

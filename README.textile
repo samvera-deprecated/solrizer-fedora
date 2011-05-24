@@ -36,7 +36,7 @@ Once you have updated the jetty submodule, you can easily run the rspec tests wi
 rake hudson
 </pre>
 
-While the primary intention of this task is to provide test coverage and documentation out on projecthydra's "continuous integration server":hudson.projecthydra.org, it can also be used locally to run tests without having to install and configure an instance of "hydra-jetty":https://github.com/projecthydra/hydra-jetty.
+While the primary intention of this task is to provide test coverage and documentation out on projecthydra's "continuous integration server":http://hudson.projecthydra.org, it can also be used locally to run tests without having to install and configure an instance of "hydra-jetty":https://github.com/projecthydra/hydra-jetty.
 
 Note: if you have another instance of hydra-jetty running, you should either close it down prior to running the rake hudson task.
 
@@ -133,7 +133,7 @@ full_text_solrizer = Solrizer::Fedora::Solrizer.new(:index_full_text=>true)
 
 h3. Solrizing a single object in your repository:
 
-If you have an existing object in your repository, you can solrize it by passing it's pid:
+If you have an existing object in your repository, you can solrize it by passing its pid:
 
 <pre>
 solrizer.solrize "demo:5"

@@ -1,3 +1,5 @@
+# This supports an experimental feature that allows Solrizer::Fedora::Extractor.extract_rels_ext to 
+# map between RDF URIs and compact model names like mods_document or jp2_document
 info:fedora/afmodel:SaltDocument : salt_document
 info:fedora/afmodel:JP2Document : jp2_document
 info:fedora/afmodel:ModsDocument : mods_document

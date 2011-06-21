@@ -7,8 +7,9 @@ describe Solrizer::Fedora::Indexer do
   
   before(:all) do
     
-    unless defined?(RAILS_ROOT) and defined?(RAILS_ENV)
-      RAILS_ROOT = "."
+    unless defined?(Rails) and defined?(RAILS_ENV)
+      Object.const_set("Rails", String)
+      Rails.stubs(:root).returns(".") #RAILS_ROOT = "."
       RAILS_ENV = "test"
     end
     
@@ -72,17 +73,21 @@ describe Solrizer::Fedora::Indexer do
          Object.const_set("Blacklight_temp", Blacklight )
          Object.send(:remove_const, :Blacklight)
          YAML.stubs(:load).returns({'test' => {'url' => "http://thereisnoblacklightrunning.edu:8080/solr"}})
+         ENV["environment"]="test"
          @indexer = Solrizer::Fedora::Indexer.new
          Object.const_set("Blacklight", Blacklight_temp )  
+         ENV["environment"]=nil
     end
       
     it "should find the solr.yml even if Blacklight is not loaded and RAILS is not loaded" do 
           Object.const_set("Blacklight_temp", Blacklight )
           Object.send(:remove_const, :Blacklight)
-          Object.send(:remove_const, :RAILS_ROOT)
+          Object.const_set("Rails_temp", Rails)
+          Object.send(:remove_const, :Rails)
           YAML.stubs(:load).returns({'development' => {'url' => "http://noblacklight.norails.edu:8080/solr"}})
           @indexer = Solrizer::Fedora::Indexer.new  
-           Object.const_set("Blacklight", Blacklight_temp )  
+          Object.const_set("Blacklight", Blacklight_temp )
+          Object.const_set("Rails", Rails_temp)
     end    
   end     
 end

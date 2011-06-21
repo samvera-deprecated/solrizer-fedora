@@ -12,4 +12,5 @@ group :development, :test do
   gem 'RedCloth'
 end
 
+# Specify your gem's dependencies in solrizer.gemspec
 gemspec

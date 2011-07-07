@@ -58,7 +58,7 @@ class Indexer
       solr_config = Blacklight.solr_config
     else  
       if defined?(Rails.root.to_s)
-        config_path = File.join(Rails.root.to_s, "config", "solr.yml")
+        config_path = File.join(Rails.root.to_s, "config")
         yaml = YAML.load(File.open(File.join(config_path, "solr.yml")))
         puts RAILS_ENV + "*****"
         solr_config = yaml[RAILS_ENV]

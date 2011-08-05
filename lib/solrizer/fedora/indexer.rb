@@ -59,7 +59,7 @@ class Indexer
     else  
       if defined?(Rails.root.to_s)
         config_path = File.join(Rails.root.to_s, "config", "solr.yml")
-        yaml = YAML.load(File.open(File.join(config_path, "solr.yml")))
+        yaml = YAML.load(File.open(config_path))
         puts RAILS_ENV + "*****"
         solr_config = yaml[RAILS_ENV]
         puts solr_config.inspect

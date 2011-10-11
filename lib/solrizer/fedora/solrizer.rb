@@ -45,18 +45,16 @@ class Solrizer
       start = Time.now
       logger.debug "SOLRIZER Retrieving object #{obj} ..."
 
-      case obj
-      when ActiveFedora::Base
+
+      if obj.instance_of? ActiveFedora::Base
         # do nothing
-      when Fedora::FedoraObject
-        obj = Repository.get_object( obj.pid )
-      when String
+      elsif obj.kind_of? String
         obj = Repository.get_object( obj )
+      elsif obj.respond_to? :pid
+        obj = Repository.get_object( obj.pid )
       else
         raise "you must pass either a ActiveFedora::Base, Fedora::RepositoryObject, or a String.  You submitted a #{obj.class}"
       end
-      
-      # obj = obj.kind_of?(ActiveFedora::Base) ? obj : Repository.get_object( obj )
         
           obj_done = Time.now
           obj_done_elapse = obj_done - start

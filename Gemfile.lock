@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    solrizer-fedora (1.1.1)
+    solrizer-fedora (1.1.3)
       active-fedora (>= 2.3.0)
       fastercsv
       rsolr

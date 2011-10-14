@@ -46,7 +46,7 @@ class Solrizer
       logger.debug "SOLRIZER Retrieving object #{obj} ..."
 
 
-      if obj.instance_of? ActiveFedora::Base
+      if obj.kind_of? ActiveFedora::Base
         # do nothing
       elsif obj.kind_of? String
         obj = Repository.get_object( obj )

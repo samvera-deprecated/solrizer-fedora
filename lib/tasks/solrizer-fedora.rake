@@ -1,3 +1,5 @@
+require 'jettywrapper'
+APP_ROOT = File.expand_path("../..",File.dirname(__FILE__))
 desc "Task to execute builds on a Hudson Continuous Integration Server."
 task :hudson do
   if (ENV['RAILS_ENV'] == "test")  

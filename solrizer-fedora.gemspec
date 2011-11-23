@@ -22,10 +22,12 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "solrizer-fedora"
 
   s.add_dependency('solr-ruby', '>= 0.0.6')
-  s.add_dependency('active-fedora', '>= 2.3.0') 
+  s.add_dependency('active-fedora', '~> 3.1.0') 
   s.add_dependency('rsolr') 
   s.add_dependency('solrizer', '>=1.0.0')
   s.add_dependency('fastercsv') # this is used by solrize_objects when you pass it a csv file of pids
+  s.add_dependency('jettywrapper', '~> 1.1.0')
+  s.add_dependency('activesupport')
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

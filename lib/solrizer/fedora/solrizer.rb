@@ -5,6 +5,7 @@ require 'solrizer/fedora/indexer'
 require 'solrizer/xml'
 require 'solrizer/html'
 
+require 'active_support/core_ext/hash'
 # Let people explicitly require xml support if they want it ...
 # require 'solrizer/xml.rb'
 
@@ -14,6 +15,11 @@ require "ruby-debug"
 
 module Solrizer::Fedora
 class Solrizer
+  ALL_FIELDS = [
+    :pid, :label, :fType, :cModel, :state, :ownerId, :cDate, :mDate, :dcmDate, 
+    :bMech, :title, :creator, :subject, :description, :contributor,
+    :date, :type, :format, :identifier, :source, :language, :relation, :coverage, :rights 
+  ]
 
   attr_accessor :indexer, :index_full_text
 
@@ -93,7 +99,7 @@ class Solrizer
 
     if @@index_list == false
       
-      objects = ::Fedora::Repository.instance.find_objects(:limit=>num_docs)
+      objects = find_objects(:limit=>num_docs)
 
       puts "Shelving #{objects.length} Fedora objects"
       objects.each do |object|
@@ -118,6 +124,20 @@ class Solrizer
      
     end #if Index_LISTS
   end #solrize_objects
+
+  def find_objects(*args)
+      raise ArgumentError, "Missing query string" unless args.length >= 1
+      options = args.last.is_a?(Hash) ? args.pop : {}
+
+      params = {}
+      params[:query] = ''
+      params[:maxResults] = options[:limit] if options[:limit]
+      params[:pid] = true
+      connection = ActiveFedora::RubydoraConnection.instance.connection
+      response = Hash.from_xml(connection.find_objects(params))
+      response["result"]["resultList"]["objectFields"].map{|x| x["pid"]}
+  end
+    
 
 end #class
 end #module

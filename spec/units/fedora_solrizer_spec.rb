@@ -13,7 +13,7 @@ describe Solrizer::Fedora::Solrizer do
       @solrizer.solrize( sample_obj )
     end
     it "should work with Fedora::FedoraObject objects" do
-      mock_object = Fedora::FedoraObject.new(:pid=>"my:pid", :label=>"my label")
+      mock_object = stub(:pid=>"my:pid", :label=>"my label")
       ActiveFedora::Base.expects(:load_instance).with( mock_object.pid ).returns(mock_object)
       @solrizer.indexer.expects(:index).with( mock_object )
       @solrizer.solrize( mock_object )
@@ -32,16 +32,16 @@ describe Solrizer::Fedora::Solrizer do
   end
   
   describe "solrize_objects" do
+    before do
+      @objects = ["pid1", "pid2", "pid3"]
+      @solrizer.expects(:find_objects).returns(@objects)
+    end 
     it "should call solrize for each object returned by Fedora::Repository.find_objects" do
-      objects = [["pid1"], ["pid2"], ["pid3"]]
-      Fedora::Repository.any_instance.expects(:find_objects).returns(objects)
-      objects.each {|object| @solrizer.expects(:solrize).with( object, {} ) }
+      @objects.each {|x| @solrizer.expects(:solrize).with( x, {}) }
       @solrizer.solrize_objects
     end
     it "should pass optional suppress_errors argument into .solrize method" do
-      objects = [["pid1"], ["pid2"], ["pid3"]]
-      Fedora::Repository.any_instance.expects(:find_objects).returns(objects)
-      objects.each {|object| @solrizer.expects(:solrize).with( object, :suppress_errors => true ) }
+      @objects.each {|x| @solrizer.expects(:solrize).with( x, :suppress_errors => true ) }
       @solrizer.solrize_objects( :suppress_errors => true )
     end
   end

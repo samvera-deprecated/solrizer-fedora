@@ -6,7 +6,6 @@ Gem::Specification.new do |s|
   s.name        = "solrizer-fedora"
   s.version     = Solrizer::Fedora::VERSION
   s.authors = ["Matt Zumwalt"]
-  s.date = %q{2011-05-20}
   s.description = %q{An extension to projecthydra/solrizer that provides utilities for loading objects from Fedora Repositories and creating solr documents from them.}
   s.email = %q{matt.zumwalt@yourmediashelf.com}
   s.extra_rdoc_files = [

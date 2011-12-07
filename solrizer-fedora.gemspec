@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency('rsolr') 
   s.add_dependency('solrizer', '>=1.0.0')
   s.add_dependency('fastercsv') # this is used by solrize_objects when you pass it a csv file of pids
-  s.add_dependency('jettywrapper', '~> 1.1.0')
+  s.add_dependency('jettywrapper', '>=1.1.0')
   s.add_dependency('activesupport')
 
   s.files         = `git ls-files`.split("\n")

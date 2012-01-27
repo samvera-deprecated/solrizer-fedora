@@ -10,7 +10,6 @@ require 'active_support/core_ext/hash'
 # require 'solrizer/xml.rb'
 
 require 'fastercsv' # this is used by solrize_objects when you pass it a csv file of pids
-require "ruby-debug"
 
 
 module Solrizer::Fedora

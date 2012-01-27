@@ -1,3 +1,6 @@
+h2. 1.2.3
+Don't require ruby-debug
+
 h2. 1.2.2
 Now requires active-fedora >= 3.1.0
 

@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "solrizer-fedora"
 
   s.add_dependency('solr-ruby', '>= 0.0.6')
-  s.add_dependency('active-fedora', '~> 3.2.0') 
+  s.add_dependency('active-fedora', '>=3.2.0') 
   s.add_dependency('rsolr', '1.0.6') 
   s.add_dependency('solrizer', '>=1.0.0')
   s.add_dependency('fastercsv') # this is used by solrize_objects when you pass it a csv file of pids

@@ -1,3 +1,6 @@
+h2. 1.2.5
+Requiring active-fedora >= 3.2.0
+
 h2. 1.2.4
 Don't need to init active-fedora
 Requiring active-fedora ~> 3.2.0

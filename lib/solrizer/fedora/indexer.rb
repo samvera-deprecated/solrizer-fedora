@@ -50,9 +50,9 @@ class Indexer
 
   def connect
 
-    if ActiveFedora.fedora_config.empty?
-      ActiveFedora.init
-    end
+    # if ActiveFedora.fedora_config.empty?
+    #   ActiveFedora.init
+    # end
 
     if defined?(Blacklight)
       solr_config = Blacklight.solr_config

@@ -74,8 +74,9 @@ namespace :solrizer do
       puts "Solrizer task complete."
     end  
     
-    Spec::Rake::SpecTask.new(:rspec) do |t|
-      t.spec_files = FileList['spec/**/*_spec.rb']
+    RSpec::Core::RakeTask.new(:rspec) do |t|
+      t.pattern = 'spec/**/*_spec.rb'
+      #t.spec_files = FileList['spec/**/*_spec.rb']
       t.rcov = true
       t.rcov_opts = lambda do
         IO.readlines("spec/rcov.opts").map {|l| l.chomp.split " "}.flatten

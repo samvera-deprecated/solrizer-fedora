@@ -30,6 +30,28 @@ describe Solrizer::Fedora::Solrizer do
     end
 
   end
+
+  describe "find_objects" do
+    describe "when fedora is not sharded" do
+      it "should find_objects" do
+        @solrizer.find_objects(:limit=>2).should == ["fedora-system:ContentModel-3.0", "fedora-system:FedoraObject-3.0"]
+      end
+    end
+    describe "when fedora is sharded" do
+      before do
+        @mock1 = mock("connection1")
+        @mock2 = mock("connection2")
+        @solrizer.expects(:connections).returns([@mock1, @mock2])
+      end
+      it "should hit all the shards" do
+        @mock1.expects(:find_objects).returns("<result><resultList><objectFields><pid>one</pid></objectFields><objectFields><pid>two</pid></objectFields></resultList></result>")
+        @mock2.expects(:find_objects).returns("<result><resultList><objectFields><pid>three</pid></objectFields><objectFields><pid>four</pid></objectFields></resultList></result>")
+
+        @solrizer.find_objects(:limit=>2).should == ['one', 'two', 'three', 'four']
+      end
+    end
+
+  end
   
   describe "solrize_objects" do
     before do

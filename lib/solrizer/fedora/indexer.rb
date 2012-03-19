@@ -49,11 +49,6 @@ class Indexer
   #
 
   def connect
-
-    # if ActiveFedora.fedora_config.empty?
-    #   ActiveFedora.init
-    # end
-
     if defined?(Blacklight)
       solr_config = Blacklight.solr_config
     else  
@@ -95,30 +90,13 @@ class Indexer
     end
 
     @solr = RSolr.connect :url => url
-    # @connection = Solr::Connection.new(url, :autocommit => :on )
   
   rescue RuntimeError => e
     logger.debug "Unable to establish SOLR Connection with #{solr_config.inspect}.  Failed with #{e.message}"
     raise  URI::InvalidURIError
   end
 
-  #
-  # This method extracts the facet categories from the given Fedora object's external tag datastream
-  #
-  def extract_xml_to_solr( obj, ds_name, solr_doc=Hash.new )
-    xml_ds = Repository.get_datastream( obj, ds_name )
-    extractor.xml_to_solr( xml_ds.content, solr_doc )
-  end
-  
-  #
-  #
-  #
-  def extract_rels_ext( obj, ds_name, solr_doc=Hash.new )
-    rels_ext_ds = Repository.get_datastream( obj, ds_name )
-    extractor.extract_rels_ext( rels_ext_ds.content, solr_doc )
-  end
-  
-  #
+   #
   # This method generates the month and day facets from the date_t in solr_doc
   #
   
@@ -158,8 +136,7 @@ class Indexer
     
     return solr_doc
         
-  end
-  
+  end 
   
   #
   # This method creates a Solr-formatted XML document
@@ -224,23 +201,9 @@ class Indexer
     end
    
   end
-
-  #
-  # This method queries the Solr search index and returns a response
-  #
-  def query( query_str )
-    response = conn.query( query_str )
-  end
   
 
   private :connect, :create_document
 
-  def class_exists?(class_name)
-    klass = Module.const_get(class_name)
-    return klass.is_a?(Class)
-  rescue NameError
-    return false
-  end
-  
 end
 end

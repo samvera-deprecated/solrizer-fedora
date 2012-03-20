@@ -1,5 +1,5 @@
 h2. 2.0.0
-Requiring active-fedora >= 3.3.3
+Requiring active-fedora >= 4.0.0 
 Supports sharding.
 Removed dependency on ruby-solr
 

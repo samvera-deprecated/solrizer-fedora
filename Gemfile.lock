@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    solrizer-fedora (2.0.0.rc1)
-      active-fedora (= 4.0.0.rc15)
+    solrizer-fedora (2.0.0.rc2)
+      active-fedora (~> 4.0.0.rc15)
       fastercsv
 
 GEM

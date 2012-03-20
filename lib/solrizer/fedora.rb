@@ -12,3 +12,6 @@ end
 Dir[File.join(File.dirname(__FILE__),"fedora","*.rb")].each {|file| require file }
 
 Solrizer::Extractor.send(:include, Solrizer::Fedora::Extractor)
+
+load File.join(File.dirname(__FILE__),"../tasks/solrizer-fedora.rake") if defined?(Rake)
+

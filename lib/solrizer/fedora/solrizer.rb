@@ -96,13 +96,11 @@ module Solrizer::Fedora
 
       if @@index_list == false
         
-        objects = find_objects(:limit=>num_docs)
-
-        puts "Shelving #{objects.length} Fedora objects"
-        objects.each do |object|
-          solrize( object, opts )
-        end
-       
+        connections.each do |conn|
+          conn.search(nil) do |object|
+            solrize( object.pid, opts )
+          end
+        end 
       else
          if File.exists?(@@index_list)
             arr_of_pids = FasterCSV.read(@@index_list, :headers=>false)
@@ -120,23 +118,6 @@ module Solrizer::Fedora
        
       end #if Index_LISTS
     end #solrize_objects
-
-    def find_objects(*args)
-        raise ArgumentError, "Missing query string" unless args.length >= 1
-        options = args.last.is_a?(Hash) ? args.pop : {}
-
-        params = {}
-        params[:query] = ''
-        params[:maxResults] = options[:limit] if options[:limit]
-        params[:pid] = true
-        
-        pids = []
-        connections.each do |conn|
-          response = Hash.from_xml(conn.find_objects(params))
-          pids << response["result"]["resultList"]["objectFields"].map{|x| x["pid"]}
-        end
-        pids.flatten
-    end
 
     private
     

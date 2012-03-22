@@ -31,40 +31,36 @@ describe Solrizer::Fedora::Solrizer do
 
   end
 
-  describe "find_objects" do
-    describe "when fedora is not sharded" do
-      it "should find_objects" do
-        @solrizer.find_objects(:limit=>2).should == ["fedora-system:ContentModel-3.0", "fedora-system:FedoraObject-3.0"]
-      end
-    end
+  describe "solrize_objects" do
     describe "when fedora is sharded" do
       before do
         @mock1 = mock("connection1")
         @mock2 = mock("connection2")
         @solrizer.expects(:connections).returns([@mock1, @mock2])
+        @mock1.expects(:search).yields(stub('obj', :pid=>'one'))
+        @mock2.expects(:search).yields(stub('obj', :pid=>'two'))
       end
       it "should hit all the shards" do
-        @mock1.expects(:find_objects).returns("<result><resultList><objectFields><pid>one</pid></objectFields><objectFields><pid>two</pid></objectFields></resultList></result>")
-        @mock2.expects(:find_objects).returns("<result><resultList><objectFields><pid>three</pid></objectFields><objectFields><pid>four</pid></objectFields></resultList></result>")
-
-        @solrizer.find_objects(:limit=>2).should == ['one', 'two', 'three', 'four']
+        @solrizer.expects(:solrize).with('one', {})
+        @solrizer.expects(:solrize).with('two', {})
+        @solrizer.solrize_objects()
       end
     end
 
-  end
-  
-  describe "solrize_objects" do
-    before do
-      @objects = ["pid1", "pid2", "pid3"]
-      @solrizer.expects(:find_objects).returns(@objects)
-    end 
-    it "should call solrize for each object returned by Fedora::Repository.find_objects" do
-      @objects.each {|x| @solrizer.expects(:solrize).with( x, {}) }
-      @solrizer.solrize_objects
-    end
-    it "should pass optional suppress_errors argument into .solrize method" do
-      @objects.each {|x| @solrizer.expects(:solrize).with( x, :suppress_errors => true ) }
-      @solrizer.solrize_objects( :suppress_errors => true )
+    describe "with one connection" do
+      before do
+        @mock1 = mock("connection1")
+        @solrizer.expects(:connections).returns([@mock1])
+        @mock1.expects(:search).yields(stub('obj', :pid=>'one'))
+      end 
+      it "should solrize_objects" do
+        @solrizer.expects(:solrize).with('one', {})
+        @solrizer.solrize_objects()
+      end
+      it "should pass optional suppress_errors argument into .solrize method" do
+        @solrizer.expects(:solrize).with( 'one', :suppress_errors => true )
+        @solrizer.solrize_objects( :suppress_errors => true )
+      end
     end
   end
 end

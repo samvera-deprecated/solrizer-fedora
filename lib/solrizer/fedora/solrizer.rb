@@ -7,9 +7,6 @@ require 'solrizer/html'
 
 require 'active_support/core_ext/hash'
 
-require 'fastercsv' # this is used by solrize_objects when you pass it a csv file of pids
-
-
 module Solrizer::Fedora
   class Solrizer
     ALL_FIELDS = [
@@ -95,29 +92,28 @@ module Solrizer::Fedora
       puts "WARNING: You have turned off indexing of Full Text content.  Be sure to re-run indexer with @@index_full_text set to true in main.rb" if index_full_text == false
 
       if @@index_list == false
-        
-        connections.each do |conn|
-          conn.search(nil) do |object|
-            solrize( object.pid, opts )
-          end
-        end 
+        solrize_from_fedora_search(opts) 
       else
-         if File.exists?(@@index_list)
-            arr_of_pids = FasterCSV.read(@@index_list, :headers=>false)
-            
-            puts "Indexing from list at #{@@index_list}"
-            puts "Shelving #{arr_of_pids.length} Fedora objects"
-            
-           arr_of_pids.each do |row|
-              pid = row[0]
-              solrize( pid )
-           end #FASTERCSV
-         else
-           puts "#{@@index_list} does not exists!"
-         end #if File.exists
-       
-      end #if Index_LISTS
-    end #solrize_objects
+        solrize_from_csv
+      end
+    end
+
+    def solrize_from_fedora_search(opts)
+      connections.each do |conn|
+        conn.search(nil) do |object|
+          solrize( object.pid, opts )
+        end
+      end 
+    end
+
+    def solrize_from_csv
+      raise ArgumentException, "#{@@index_list} does not exists!" unless File.exists?(@@index_list)
+      puts "Indexing from list at #{@@index_list}"
+      CSV.foreach(@@index_list) do |row|
+          pid = row[0]
+          solrize( pid )
+      end 
+    end
 
     private
     

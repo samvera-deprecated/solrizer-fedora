@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Solrizer::Fedora::VERSION
   s.authors = ["Matt Zumwalt"]
   s.description = %q{An extension to projecthydra/solrizer that provides utilities for loading objects from Fedora Repositories and creating solr documents from them.}
-  s.email = %q{matt.zumwalt@yourmediashelf.com}
+  s.email = %q{hydra-tech@googlegroups.com}
   s.extra_rdoc_files = [
     "LICENSE",
     "README.textile"
@@ -23,9 +23,13 @@ Gem::Specification.new do |s|
   s.add_dependency('active-fedora', '~> 4.0.0') 
   s.add_development_dependency('jettywrapper', '>=1.1.0')
   s.add_development_dependency('rdoc')
+  s.add_development_dependency('rcov')
+  s.add_development_dependency('rspec', '~>2.6.0')  #'>=2.8.0'
+  s.add_development_dependency('mocha')
+  s.add_development_dependency('yard')
+  s.add_development_dependency('RedCloth')
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.test_files    = `git ls-files -- {spec,features}/*`.split("\n")
+#  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
 end

@@ -184,7 +184,7 @@ Now your solr doc with the "changeme:123" ID will include the following:
 
 h2. Modifying and Testing the Solrizer-Fedora gem
 
-In order to run the RSpec tests, it is necesary to have a hydra-jetty instance running.  This can be accomplished two ways:
+In order to run the RSpec tests, it is necessary to have a hydra-jetty instance running.  This can be accomplished two ways:
 
 h3. Using the bundled jetty instance:
 

@@ -1,9 +1,8 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'solrizer/fedora'
-require 'rspec'
-
 require 'solrizer'
+require 'rspec'
 
 
 # this allows us to unload constants for testing
@@ -19,13 +18,10 @@ module Kernel
 end
 
 
-
 RSpec.configure do |config|
   
   config.mock_with :mocha
   config.color_enabled = true
-  
-  
   
   def fixture(file)
     File.new(File.join(File.dirname(__FILE__), 'fixtures', file))

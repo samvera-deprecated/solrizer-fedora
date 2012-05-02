@@ -41,6 +41,7 @@ namespace :solrizer do
     #  spec.libs << 'lib' << 'spec'
       spec.pattern = 'spec/**/*_spec.rb'
       spec.rcov = true
+      spec.rcov_opts = %w{--exclude spec,gems}
     end
 
     begin

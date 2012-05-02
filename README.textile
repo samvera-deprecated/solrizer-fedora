@@ -17,37 +17,9 @@ Then:
 <pre>bundle install</pre>
 
 
-h2. Testing
+h2. Pre-requisite to Use of Solrizer-Fedora
 
-In order to run the RSpec tests, it is necesary to have a hydra-jetty instance running.  This can be accomplished two ways:
-
-h3. Using the bundled jetty instance:
-
-Configure the bundled hydra-jetty instance.
-
-<pre>
-git submodule init
-git submodule update
-</pre>
-
-Once you have updated the jetty submodule, you can easily run the rspec tests with the following rake task:
-
-<pre>
-rake hudson
-</pre>
-
-While the primary intention of this task is to provide test coverage and documentation out on projecthydra's "continuous integration server":http://hudson.projecthydra.org, it can also be used locally to run tests without having to install and configure an instance of "hydra-jetty":https://github.com/projecthydra/hydra-jetty.
-
-Note: if you have another instance of hydra-jetty running, you should either close it down prior to running the rake hudson task.
-
-
-h3. Using a different instance of hydra-jetty:
-
-If you prefer, you can run the specs against a different hydra-jetty instance.  Follow the instructions included with those projects to start the jetty instance.
-
-
-
-h2. Pre-requisite
+In order to use solrizer-fedora, you must have a Solr and a Fedora instance available.  The easiest approach is to set up an instance of "hydra-jetty":https://github.com/projecthydra/hydra-jetty.
 
 h3. Setup local hydra-jetty
 
@@ -159,7 +131,7 @@ solrizer.solrize_objects
 </pre>
 
 
-h3. Advanced usage
+h3. Advanced Usage
 
 Solrizer-fedora inspects your repository objects and attempts to match your objects to your ruby models based on the hasModel declarations in the RELS-EXT datastream.
 
@@ -210,7 +182,33 @@ Now your solr doc with the "changeme:123" ID will include the following:
 </pre>
 
 
+h2. Modifying and Testing the Solrizer-Fedora gem
 
+In order to run the RSpec tests, it is necesary to have a hydra-jetty instance running.  This can be accomplished two ways:
+
+h3. Using the bundled jetty instance:
+
+Configure the bundled hydra-jetty instance.
+
+<pre>
+git submodule init
+git submodule update
+</pre>
+
+Once you have updated the jetty submodule, you can easily run the rspec tests with the following rake task:
+
+<pre>
+rake hudson
+</pre>
+
+While the primary intention of this task is to provide test coverage and documentation out on projecthydra's "continuous integration server":http://hudson.projecthydra.org, it can also be used locally to run tests without having to install and configure an instance of "hydra-jetty":https://github.com/projecthydra/hydra-jetty.
+
+Note: if you have another instance of hydra-jetty running, you should either close it down prior to running the rake hudson task.
+
+
+h3. Using a different instance of hydra-jetty:
+
+If you prefer, you can run the specs against a different hydra-jetty instance.  Follow the instructions included with those projects to start the jetty instance.
 
 
 

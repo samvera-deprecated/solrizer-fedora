@@ -4,7 +4,7 @@ An extension to projecthydra/solrizer that provides utilities for loading object
 
 h2. Installation
 
-The gem is hosted on rubygems.org. The bset way to manage the gems for your project is to use bundler.  Create a Gemfile in the root of your application and include the following:
+The gem is hosted on rubygems.org. The best way to manage the gems for your project is to use bundler.  Create a Gemfile in the root of your application and include the following:
 
 <pre>
 source "http://rubygems.org"
@@ -218,7 +218,7 @@ h2.  Note on Patches/Pull Requests
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so it doesn't get broken unintentionally 
   in a future version.
-* Commit, do not mess with rakefile, version, or history.
+* Commit, do not mess with rake file, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 

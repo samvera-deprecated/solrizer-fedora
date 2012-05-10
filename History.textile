@@ -1,4 +1,9 @@
 h2. 2.0.0
+Requiring active-fedora >= 4.0 (so it will happily use 4.1.0)
+Relaxed jetty-wrapper requirement to >= 1.1
+Fix rake tasks and coverage so hudson builds pass
+
+h2. 2.0.0
 Requiring active-fedora >= 4.0.0 
 Supports sharding.
 Removed dependency on ruby-solr

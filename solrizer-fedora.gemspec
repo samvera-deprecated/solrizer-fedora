@@ -20,8 +20,8 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "solrizer-fedora"
 
-  s.add_dependency('active-fedora', '~> 4.0.0') 
-  s.add_development_dependency('jettywrapper', '>=1.1.0')
+  s.add_dependency('active-fedora', '~> 4.0') 
+  s.add_development_dependency('jettywrapper', '>=1.1')
   s.add_development_dependency('rdoc')
   s.add_development_dependency('rcov')
   s.add_development_dependency('rspec', '~>2.6.0')  #'>=2.8.0'

@@ -54,7 +54,7 @@ task :ci do
   ENV['COVERAGE'] = 'true' unless ruby_engine == 'jruby'
 
 
-  Rake::Task['solrizer:fedora:ci'].invoke
+  Rake::Task['solrizer:fedora:spec'].invoke
 end
 end
 

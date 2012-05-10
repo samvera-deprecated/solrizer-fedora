@@ -22,7 +22,6 @@ namespace :solrizer do
       end
     
       puts "Re-indexing Fedora Repository."
-      puts "Fedora URL: #{ActiveFedora.config.credentials[:url]}"
       puts "Fedora Solr URL: #{ActiveFedora.solr_config[:url]}"
       puts "Doing full text index." if index_full_text
       solrizer = Solrizer::Fedora::Solrizer.new :index_full_text=> index_full_text

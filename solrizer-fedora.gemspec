@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency('active-fedora', '~> 4.0') 
   s.add_development_dependency('jettywrapper', '>=1.1')
   s.add_development_dependency('rdoc')
+  s.add_development_dependency('rake')
   s.add_development_dependency('rspec', '~>2.6')  #'>=2.8.0'
   s.add_development_dependency('mocha')
   s.add_development_dependency('yard')

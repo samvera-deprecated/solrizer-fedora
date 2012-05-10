@@ -21,7 +21,7 @@ namespace :solrizer do
           :startup_wait => 25
         }
         error = Jettywrapper.wrap(jetty_params) do
-          Rake::Task["solrizer:fedora:spec_w_cov"].invoke
+          Rake::Task["solrizer:fedora:coverage"].invoke
           Rake::Task["solrizer:fedora:doc"].invoke
         end
         raise "test failures: #{error}" if error
@@ -36,26 +36,30 @@ namespace :solrizer do
       spec.pattern = 'spec/**/*_spec.rb'
     end
 
-    desc "Run specs with coverage"
-    RSpec::Core::RakeTask.new(:spec_w_cov) do |spec|
-    #  spec.libs << 'lib' << 'spec'
-      spec.pattern = 'spec/**/*_spec.rb'
-      spec.rcov = true
-      spec.rcov_opts = %w{--exclude spec,gems}
-    end
+    desc "Execute specs with coverage"
+task :coverage do 
+  # Put spec opts in a file named .rspec in root
+  ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
+  ENV['COVERAGE'] = 'true' unless ruby_engine == 'jruby'
 
-    begin
-      require 'rcov/rcovtask'
-      Rcov::RcovTask.new do |test|
-        test.libs << 'test'
-        test.pattern = 'test/**/test_*.rb'
-        test.verbose = true
-      end
-    rescue LoadError
-      task :rcov do
-        abort "RCov is not available. "
-      end
-    end
+
+  Rake::Task['solrizer:fedora:spec'].invoke
+end
+
+namespace :coverage do
+desc "Execute ci build with coverage"
+task :ci do 
+  # Put spec opts in a file named .rspec in root
+  ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
+  ENV['COVERAGE'] = 'true' unless ruby_engine == 'jruby'
+
+
+  Rake::Task['solrizer:fedora:ci'].invoke
+end
+end
+
+
+    desc "Run specs with coverage"
 
     # Use yard to build docs
     begin

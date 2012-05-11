@@ -46,18 +46,6 @@ task :coverage do
   Rake::Task['solrizer:fedora:spec'].invoke
 end
 
-namespace :coverage do
-desc "Execute ci build with coverage"
-task :ci do 
-  # Put spec opts in a file named .rspec in root
-  ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
-  ENV['COVERAGE'] = 'true' unless ruby_engine == 'jruby'
-
-
-  Rake::Task['solrizer:fedora:spec'].invoke
-end
-end
-
 
     desc "Run specs with coverage"
 

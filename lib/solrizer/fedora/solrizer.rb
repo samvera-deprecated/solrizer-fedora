@@ -73,7 +73,7 @@ module Solrizer::Fedora
         
       rescue Exception => e
           if opts[:suppress_errors] 
-            logger.debug "SOLRIZER unable to index #{obj}.  Failed with #{e.inspect}"
+            logger.error "SOLRIZER unable to index #{obj}.  Failed with #{e.inspect}"
           else
             raise e
           end

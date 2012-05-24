@@ -152,7 +152,7 @@ class Indexer
     # Load the object as an instance of each of its other models and get the corresponding solr fields
     # Include :model_only=>true in the options in order to avoid adding the metadata from ActiveFedora::Base every time.
     model_klazz_array.each do |klazz|
-      instance = klazz.find(obj.pid)
+      instance = obj.adapt_to(klazz)
       solr_doc = instance.to_solr(solr_doc, :model_only=>true)
       logger.debug "  added solr fields from #{klazz.to_s}"
     end

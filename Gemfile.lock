@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    solrizer-fedora (2.1.0)
+    solrizer-fedora (2.2.0)
       active-fedora (~> 4.0)
 
 GEM

@@ -14,7 +14,7 @@ describe Solrizer::Fedora::Solrizer do
     end
     it "should work with Fedora::FedoraObject objects" do
       mock_object = stub(:pid=>"my:pid", :label=>"my label")
-      ActiveFedora::Base.expects(:load_instance).with( mock_object.pid ).returns(mock_object)
+      ActiveFedora::Base.expects(:find).with( mock_object.pid ).returns(mock_object)
       @solrizer.indexer.expects(:index).with( mock_object )
       @solrizer.solrize( mock_object )
     end
@@ -24,7 +24,7 @@ describe Solrizer::Fedora::Solrizer do
       mock_object.stubs(:label)
       mock_object.stubs(:datastreams).returns({'descMetadata'=>"foo","location"=>"bar"})
 
-      ActiveFedora::Base.expects(:load_instance).with( "_PID_" ).returns(mock_object)
+      ActiveFedora::Base.expects(:find).with( "_PID_" ).returns(mock_object)
       @solrizer.indexer.expects(:index).with(mock_object)
       @solrizer.solrize("_PID_")
     end

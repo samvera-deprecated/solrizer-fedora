@@ -203,7 +203,7 @@ class Indexer
   end
   
 
-  private :connect, :create_document
+  private :connect
 
 end
 end

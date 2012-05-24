@@ -19,7 +19,7 @@ class Repository
   # This method retrieves the object associated with the given unique id
   #
   def self.get_object( pid )
-    object = ActiveFedora::Base.load_instance( pid )
+    object = ActiveFedora::Base.find( pid )
   end
   
   #

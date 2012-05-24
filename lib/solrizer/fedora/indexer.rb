@@ -167,26 +167,8 @@ class Indexer
   # This method adds a document to the Solr search index
   #
   def index( obj )
-   # print "Indexing '#{obj.pid}'..."
-    begin
-      
-      solr_doc = create_document( obj )
-      
-      begin
-        solr.add( solr_doc )
-        solr.commit
-      # rescue
-      #   debugger
-      end
- 
-     # puts solr.url
-     #puts solr_doc
-     #  puts "done"
-   
-    # rescue Exception => e
-    #    p "unable to index #{obj.pid}.  Failed with #{e.inspect}"
-    end
-   
+    solr.add( create_document( obj ) )
+    solr.commit
   end
   
 

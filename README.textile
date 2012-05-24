@@ -185,15 +185,18 @@ Now your solr doc with the "changeme:123" ID will include the following:
 h3. Rake tasks
 
 h4. solrizer:fedora:solrize
+
 Required Argument:
 * PID=ns:123  The pid of the object to index
+
 Optional Arguments:
 * FULL_TEXT=true does a full text index
 
 h4. solrizer:fedora:solrize_objects
+
 Optional Arguments:
 * FULL_TEXT=true does a full text index
-* INDEX_LIST=<filename.csv> indexes only the pids in the csv file
+* INDEX_LIST=_filename.csv_ indexes only the pids in the csv file
 
 
 h2. Modifying and Testing the Solrizer-Fedora gem

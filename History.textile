@@ -1,3 +1,6 @@
+h2. 2.3.0
+Remove Gemfile.lock
+
 h2. 2.2.0
 HYDRA-808 don't quit the whole job if one object fails to solrize 
 create_document in lib/solrizer/fedora/indexer.rb is public. Used by solrizer-rabbit

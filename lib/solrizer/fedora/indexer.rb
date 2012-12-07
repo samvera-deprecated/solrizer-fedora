@@ -37,53 +37,60 @@ class Indexer
   # or { "development"=>{"url"=>"http://localhost" }}
   # Can also take Blacklight.solr_config["url"] and Blacklight.solr_config[:url] 
   #
+  # If you want to specify a timeout for solr, provide these keys:
+  #   :read_timeout=>120, :open_timeout => 120
+  #
 
   def connect
     if defined?(Blacklight)
       solr_config = Blacklight.solr_config
-    else  
-      if defined?(Rails.root.to_s)
-        config_path = File.join(Rails.root.to_s, "config", "solr.yml")
-        yaml = YAML.load(File.open(config_path))
-        puts RAILS_ENV + "*****"
-        solr_config = yaml[RAILS_ENV]
-        puts solr_config.inspect
-      else
-        config_path = File.join("config","solr.yml")
-        unless File.exist?(config_path)
-          config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config", "solr.yml")
-        end
-        logger.debug "SOLRIZER: reading config from " + config_path.inspect 
-        yaml = YAML.load(File.open(config_path))
-      
-        if ENV["environment"].nil?
-          environment = "development"
-        else
-          environment = ENV["environment"]
-        end #if
-    
-        solr_config = yaml[environment]
-        logger.debug "SOLRIZER solr_config:" + solr_config.inspect
-      end #if defined?(Rails.root)
-    end #if defined?(Blacklight)
-    
-    if index_full_text == true && solr_config.has_key?('fulltext') && solr_config['fulltext'].has_key?('url')
-      url = solr_config['fulltext']['url']
-    elsif solr_config.has_key?("default") && solr_config['default'].has_key?('url')
-      url = solr_config['default']['url']
-    elsif solr_config.has_key?('url')
-      url = solr_config['url']
-    elsif solr_config.has_key?(:url)
-      url = solr_config[:url]
+    elsif defined?(Rails.root.to_s)
+      solr_config = load_rails_config
     else
-      raise
+      solr_config = load_fallback_config
+    end
+    
+    if index_full_text == true && solr_config.has_key?(:fulltext) && solr_config[:fulltext].has_key?('url')
+      solr_config[:url] = solr_config[:fulltext]['url']
+    elsif solr_config.has_key?(:default) && solr_config[:default].has_key?('url')
+      solr_config[:url] = solr_config[:default]['url']
+    elsif !solr_config.has_key?(:url)
+      raise "Unable to find a solr url in the config file"
     end
 
-    @solr = RSolr.connect :url => url
+    @solr = RSolr.connect solr_config
   
   rescue RuntimeError => e
     logger.debug "Unable to establish SOLR Connection with #{solr_config.inspect}.  Failed with #{e.message}"
     raise  URI::InvalidURIError
+  end
+
+
+  def load_rails_config
+    config_path = File.join(Rails.root.to_s, "config", "solr.yml")
+    yaml = YAML.load(File.open(config_path))
+    solr_config = yaml[Rails.env].symbolize_keys
+    logger.debug solr_config.inspect
+    solr_config
+  end
+
+  def load_fallback_config
+    config_path = File.join("config","solr.yml")
+    unless File.exist?(config_path)
+      config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config", "solr.yml")
+    end
+    logger.debug "SOLRIZER: reading config from " + config_path.inspect 
+    yaml = YAML.load(File.open(config_path))
+  
+    if ENV["environment"].nil?
+      environment = "development"
+    else
+      environment = ENV["environment"]
+    end #if
+
+    solr_config = yaml[environment].symbolize_keys
+    logger.debug "SOLRIZER solr_config:" + solr_config.inspect
+    solr_config
   end
 
    #

@@ -30,50 +30,6 @@ describe Solrizer::Fedora::Indexer do
     Solrizer::Extractor.stubs(:new).returns(@extractor)
   end
 
-  describe "#new" do
-    it "should return a URL from solr_config if the config has a :url" do
-         Blacklight.stubs(:solr_config).returns({:url => "http://foo.com:8080/solr"})
-         @indexer = Solrizer::Fedora::Indexer.new
-    end
-
-    it "should return a URL from solr_config if the config has a 'url' " do
-          Blacklight.stubs(:solr_config).returns({'url' => "http://foo.com:8080/solr"})
-          @indexer = Solrizer::Fedora::Indexer.new
-    end
-
-    it "should raise an error if the solr_config does not have a :url" do
-        Blacklight.stubs(:solr_config).returns({'boosh' => "http://foo.com:8080/solr"})
-        lambda { Solrizer::Fedora::Indexer.new }.should raise_error(URI::InvalidURIError)         
-    end
-
-    it "should return a fulltext URL if solr_config has a fulltext url defined" do
-         Blacklight.stubs(:solr_config).returns({'fulltext' =>{ 'url' => "http://foo.com:8080/solr"}})
-         @indexer = Solrizer::Fedora::Indexer.new(:index_full_text => true)
-    end
-
-    it "should return a fulltext URL if solr_config has a default url defined" do
-         Blacklight.stubs(:solr_config).returns({'default' =>{ 'url' => "http://foo.com:8080/solr"}})
-          @indexer = Solrizer::Fedora::Indexer.new(:index_full_text => false)
-    end
-
-    # it "should find the solr.yml even if Blacklight is not loaded and RAILS is not loaded" do 
-    #   pending "Need to unset Blacklight in order to make this work..."
-    #   # Store RAILS_ROOT if it's set
-    #   if defined? RAILS_ROOT
-    #     temp_rails_root = RAILS_ROOT
-    #     Object.send(:remove_const, :RAILS_ROOT)        
-    #   end
-    #   sample_config = {'development' => {'solr'=> {'url' => "http://noblacklight.norails.edu:8080/solr"}}}
-    #   YAML.stubs(:load).returns(sample_config)
-    #   ActiveFedora.stubs(:init)
-    #   @indexer = Solrizer::Fedora::Indexer.new  
-    #   # Re-set RAILS_ROOT if it was stored
-    #   unless  temp_rails_root.nil?
-    #     RAILS_ROOT = temp_rails_root
-    #   end
-    # end    
-  end
-   
   describe "#generate_dates" do
     before(:each) do
       Solrizer::Fedora::Indexer.any_instance.stubs(:connect).returns("foo")

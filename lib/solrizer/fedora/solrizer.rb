@@ -1,10 +1,4 @@
-require 'solrizer/field_mapper.rb'
-require 'solrizer/field_name_mapper'
-
-require 'solrizer/fedora/indexer'
-require 'solrizer/xml'
-require 'solrizer/html'
-
+require 'solrizer'
 require 'active_support/core_ext/hash'
 
 module Solrizer::Fedora

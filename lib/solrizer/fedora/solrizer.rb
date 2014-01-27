@@ -74,6 +74,10 @@ module Solrizer::Fedora
       end
 
     end
+
+    def commit
+      indexer.commit
+    end
     
     # Retrieve a comprehensive list of all the unique identifiers in Fedora and 
     # solrize each object's full-text and facets into the search index

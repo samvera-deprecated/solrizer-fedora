@@ -175,6 +175,10 @@ class Indexer
   #
   def index( obj )
     solr.add( create_document( obj ) )
+    #solr.commit
+    logger.warn "not committing"
+  end
+  def commit
     solr.commit
   end
   

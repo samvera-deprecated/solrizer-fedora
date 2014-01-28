@@ -173,6 +173,9 @@ class Indexer
   #
   # This method adds a document to the Solr search index
   #
+  def index( obj )
+    index( obj, true )
+  end
   def index( obj, autocommit )
     solr.add( create_document( obj ) )
     solr.commit if autocommit
@@ -180,7 +183,6 @@ class Indexer
   def commit
     solr.commit
   end
-  
 
   private :connect
 

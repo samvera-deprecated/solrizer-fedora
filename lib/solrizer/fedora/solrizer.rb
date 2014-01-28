@@ -57,9 +57,12 @@ module Solrizer::Fedora
            logger.debug "\t Indexing object #{obj.pid} ... "
            # add the keywords and facets to the search index
            index_start = Time.now
-           commit = opts[:autocommit]
-           commit ||= true
-           indexer.index( obj, commit )
+           if opts[:autocommit] != nil
+             autocommit = opts[:autocommit]
+           else
+             autocommit = true
+           end
+           indexer.index( obj, autocommit )
            
            index_done = Time.now
            index_elapsed = index_done - index_start

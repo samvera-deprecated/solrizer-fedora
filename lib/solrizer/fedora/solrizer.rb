@@ -57,7 +57,12 @@ module Solrizer::Fedora
            logger.debug "\t Indexing object #{obj.pid} ... "
            # add the keywords and facets to the search index
            index_start = Time.now
-           indexer.index( obj )
+           if opts[:autocommit] != nil
+             autocommit = opts[:autocommit]
+           else
+             autocommit = true
+           end
+           indexer.index( obj, autocommit )
            
            index_done = Time.now
            index_elapsed = index_done - index_start
@@ -73,6 +78,10 @@ module Solrizer::Fedora
           end
       end
 
+    end
+
+    def commit
+      indexer.commit
     end
     
     # Retrieve a comprehensive list of all the unique identifiers in Fedora and 
